@@ -2,13 +2,17 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { BigNumber } from "ethers";
-import { MyERC20Token, TokenSale } from "../typechain-types";
+import { MyERC20Token, MyERC721Token, TokenSale } from "../typechain-types";
 
 const ERC20_TOKEN_RATIO = 5;
+const NFT_TOKEN_PRICE = 5;
+
+
 
 describe("NFT Shop", async () => {
     let tokenSaleContract: TokenSale;
     let erc20Token: MyERC20Token;
+    let erc721Token: MyERC721Token;
     let deployer: SignerWithAddress;
     let acc1: SignerWithAddress;
     let acc2: SignerWithAddress;
@@ -23,7 +27,9 @@ describe("NFT Shop", async () => {
         await erc20Token.deployed();
         tokenSaleContract = await tokenSaleContractFactory.deploy(
             ERC20_TOKEN_RATIO,
-            erc20Token.address
+            NFT_TOKEN_PRICE,
+            erc20Token.address,
+            erc721Token.address
         );
         await tokenSaleContract.deployed();
 
@@ -96,44 +102,54 @@ describe("NFT Shop", async () => {
 
             beforeEach(async () => {
 
-                const approveTx = await erc20Token.connect(acc2).approve(tokenSaleContract.address, amountToBeReceived);
+                const approveTx = await erc20Token.connect(acc1).approve(tokenSaleContract.address, amountToBeReceived);
                 const approveTxReceipt = await approveTx.wait();
                 const approveUnitsUsed = approveTxReceipt.gasUsed;
                 const approveGasPrice = approveTxReceipt.effectiveGasPrice;
                 approveGasCosts = approveUnitsUsed.mul(approveGasPrice);
 
-                const burnTokenTx = await tokenSaleContract.connect(acc2).burnTokens();
-                const burnTokenTxRecepit = await burnTokenTx.wait(amountToBeReceived);
+                const burnTokenTx = await tokenSaleContract.connect(acc1).burnTokens(amountToBeReceived);
+                const burnTokenTxRecepit = await burnTokenTx.wait();
                 const burnGasUnitsUsed = burnTokenTxRecepit.gasUsed;
                 const burnGasPrice = burnTokenTxRecepit.effectiveGasPrice;
                 burnGasCosts = burnGasUnitsUsed.mul(burnGasPrice);
             })
-            it("gives the correct amount of ETH", () => {
+            it("gives the correct amount of ETH", async () => {
+                const balanceAfterBn = await acc1.getBalance();
+                const diff = balanceBeforeBn.sub(balanceAfterBn);
+                const expectedDiff = purchaseGasCosts.add(approveGasCosts).add(burnGasCosts);
+                const error = expectedDiff.sub(diff);
+                expect(error).to.equal(0);
+            });
+
+            it("burns the correct amount of tokens", async () => {
+                const acc1balance = await erc20Token.balanceOf(acc1.address);
+                expect(acc1balance).to.equal(0);
+                const totalSupply = await erc20Token.totalSupply()
+                expect(totalSupply).to.equal(0);
+
+            });
+        });
+
+
+        describe("When a user purchase a NFT from the Shop contract", () => {
+            it("charges the correct amount of ETH", () => {
                 throw new Error("Not implemented");
             });
 
-            it("burns the correct amount of tokens", () => {
+            it("updates the owner account correctly", () => {
+                throw new Error("Not implemented");
+            });
+
+            it("update the pool account correctly", () => {
+                throw new Error("Not implemented");
+            });
+
+            it("favors the pool with the rounding", () => {
                 throw new Error("Not implemented");
             });
         });
     });
-    // describe("When a user purchase a NFT from the Shop contract", () => {
-    //     it("charges the correct amount of ETH", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("updates the owner account correctly", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("update the pool account correctly", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("favors the pool with the rounding", () => {
-    //         throw new Error("Not implemented");
-    //     });
-    // });
 
     // describe("When a user burns their NFT at the Shop contract", () => {
     //     it("gives the correct amount of ERC20 tokens", () => {
