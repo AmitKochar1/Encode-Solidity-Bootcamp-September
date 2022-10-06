@@ -22,4 +22,8 @@ contract TokenSale {
         uint256 tokensToBeEarned = etherReceived / ratio;
         paymentToken.mint(msg.sender, tokensToBeEarned);
     }
+
+    function burnTokens(uint256 amount) public {
+        paymentToken.transferFrom(msg.sender, address(this), amount);
+    }
 }
