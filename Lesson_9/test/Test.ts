@@ -1,73 +1,32 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { MyERC20Token } from "../typechain-types";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
-describe("NFT Shop", () => {
-    beforeEach(() => { });
+const INITIAL_SUPPLY = 10000;
 
-    // describe("When the Shop contract is deployed", () => {
-    //     it("defines the ratio as provided in parameters", () => {
-    //         throw new Error("Not implemented");
-    //     });
+describe("basic tests to understand ERC20", () => {
+    let MyERC20Contract: MyERC20Token;
+    let accounts = SignerWithAddress[0];
 
-    //     it("uses a valid ERC20 as payment token", () => {
-    //         throw new Error("Not implemented");
-    //     });
-    // });
+    beforeEach(async () => {
+        accounts = await ethers.getSigners();
+        const MyERC20ContractFactory = await ethers.getContractFactory("MyERC20Token");
+        MyERC20Contract = await MyERC20ContractFactory.deploy(INITIAL_SUPPLY);
+        await MyERC20Contract.deployed();
+    });
 
-    // describe("When a user purchase an ERC20 from the Token contract", () => {
-    //     it("charges the correct amount of ETH", () => {
-    //         throw new Error("Not implemented");
-    //     });
+    it('Should have zero total supply at deployment', async () => {
+        const totalSupplyBN = await MyERC20Contract.totalSupply();
+        const decimals = await MyERC20Contract.decimals();
+        const totalSupply = parseFloat(ethers.utils.formatUnits(totalSupplyBN, decimals)); //ether utili to convert the big number, parse to convert the string to number;
+        expect(totalSupply).to.equal(INITIAL_SUPPLY);
+    })
 
-    //     it("gives the correct amount of tokens", () => {
-    //         throw new Error("Not implemented");
-    //     }); 
-    // });
+    it('Triggers the Transfer event with the address of the sender when sending transaction', async () => {
+        const senderAddress = accounts[0].address;
+        const recieveAddress = accounts[1].address;
+        await expect(MyERC20Contract.transfer(recieveAddress, 1)).to.emit(MyERC20Contract, "Transfer").withArgs(senderAddress, recieveAddress, 1);
+    })
 
-    // describe("When a user burns an ERC20 at the Token contract", () => {
-    //     it("gives the correct amount of ETH", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("burns the correct amount of tokens", () => {
-    //         throw new Error("Not implemented");
-    //     });
-    // });
-
-    // describe("When a user purchase a NFT from the Shop contract", () => {
-    //     it("charges the correct amount of ETH", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("updates the owner account correctly", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("update the pool account correctly", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("favors the pool with the rounding", () => {
-    //         throw new Error("Not implemented");
-    //     });
-    // });
-
-    // describe("When a user burns their NFT at the Shop contract", () => {
-    //     it("gives the correct amount of ERC20 tokens", () => {
-    //         throw new Error("Not implemented");
-    //     });
-    //     it("updates the pool correctly", () => {
-    //         throw new Error("Not implemented");
-    //     });
-    // });
-
-    // describe("When the owner withdraw from the Shop contract", () => {
-    //     it("recovers the right amount of ERC20 tokens", () => {
-    //         throw new Error("Not implemented");
-    //     });
-
-    //     it("updates the owner account correctly", () => {
-    //         throw new Error("Not implemented");
-    //     });
-    // });
 });
