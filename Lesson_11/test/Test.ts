@@ -92,15 +92,21 @@ describe("NFT Shop", async () => {
 
         describe("When a user burns an ERC20 at the Token contract", () => {
             let burnGasCosts: BigNumber;
+            let approveGasCosts: BigNumber;
 
             beforeEach(async () => {
-                const approveTx = await erc20Token.approve(tokenSaleContract.address, amountToBeReceived);
+
+                const approveTx = await erc20Token.connect(acc2).approve(tokenSaleContract.address, amountToBeReceived);
                 const approveTxReceipt = await approveTx.wait();
-                const burnTokenTx = await tokenSaleContract.connect(acc1).purchaseTokens();
+                const approveUnitsUsed = approveTxReceipt.gasUsed;
+                const approveGasPrice = approveTxReceipt.effectiveGasPrice;
+                approveGasCosts = approveUnitsUsed.mul(approveGasPrice);
+
+                const burnTokenTx = await tokenSaleContract.connect(acc2).burnTokens();
                 const burnTokenTxRecepit = await burnTokenTx.wait(amountToBeReceived);
-                const gasUnitsUsed = burnTokenTxRecepit.gasUsed;
-                const gasPrice = burnTokenTxRecepit.effectiveGasPrice;
-                burnGasCosts = gasUnitsUsed.mul(gasPrice);
+                const burnGasUnitsUsed = burnTokenTxRecepit.gasUsed;
+                const burnGasPrice = burnTokenTxRecepit.effectiveGasPrice;
+                burnGasCosts = burnGasUnitsUsed.mul(burnGasPrice);
             })
             it("gives the correct amount of ETH", () => {
                 throw new Error("Not implemented");
