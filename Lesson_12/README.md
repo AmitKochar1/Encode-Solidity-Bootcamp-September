@@ -1,19 +1,18 @@
-Lesson 12 - Tokenized Votes
-The ERC20Votes ERC20 extension
-ERC20Votes properties
-Snapshots
-Creating snapshots when supply changes
-Using snapshots
-Self delegation
-Contract overall operation
-References
+# Lesson 12 - Tokenized Votes
+## The ERC20Votes ERC20 extension
+* ERC20Votes properties
+* Snapshots
+* Creating snapshots when supply changes
+* Using snapshots
+* Self delegation
+* Contract overall operation
+### References
 https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20Votes
 
 https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20Snapshot
 
 https://docs.openzeppelin.com/contracts/4.x/api/token/erc20#ERC20Permit
-
-// SPDX-License-Identifier: MIT
+<pre><code>// SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -55,17 +54,19 @@ contract MyToken is ERC20, AccessControl, ERC20Permit, ERC20Votes {
     {
         super._burn(account, amount);
     }
-}
-ERC20Votes and Ballot.sol
-(Review) TDD
-Mapping scenarios
-Contracts structure
-Homework
-Create Github Issues with your questions about this lesson
-Read the references
-Weekend project
-Form groups of 3 to 5 students
-Complete the contracts together
-Develop and run scripts for “TokenizedBallot.sol” within your group to give voting tokens, delegating voting power, casting votes, checking vote power and querying results
-Write a report with each function execution and the transaction hash, if successful, or the revert reason, if failed
-Share your code in a github repo in the submission form
+}</code></pre>
+## ERC20Votes and Ballot.sol
+* (Review) TDD
+* Mapping scenarios
+* Contracts structure
+
+# Homework
+* Create Github Issues with your questions about this lesson
+* Read the references
+
+# Weekend project
+* Form groups of 3 to 5 students
+* Complete the contracts together
+* Develop and run scripts for “TokenizedBallot.sol” within your group to give voting tokens, delegating voting power, casting votes, checking vote power and querying results
+* Write a report with each function execution and the transaction hash, if successful, or the revert reason, if failed
+* Share your code in a github repo in the submission form

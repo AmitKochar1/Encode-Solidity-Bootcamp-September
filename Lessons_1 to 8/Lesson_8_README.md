@@ -1,20 +1,16 @@
-Lesson 8 - Scripts for Ballot.sol and events
-
-Using scripts to automate operations
-
-    Running a script with yarn and node, ts-node and/or hardhat
-    Ballot deployment script
-    Passing arguments
-    Passing variables to the deployment script
-    Environment files
-    Providers
-    Connecting to a testnet with a RPC Provider
-    Running scripts on chain
-    Script for giving voting rights to a given address
-    Dealing with transactions in scripts
-
-References
-
+# Lesson 8 - Scripts for Ballot.sol and events
+## Using scripts to automate operations
+* Running a script with yarn and node, ts-node and/or hardhat
+* Ballot deployment  script
+* Passing arguments
+* Passing variables to the deployment script
+* Environment files
+* Providers
+* Connecting to a testnet with a RPC Provider
+* Running scripts on chain
+* Script for giving voting rights to a given address
+* Dealing with transactions in scripts
+### References
 https://hardhat.org/hardhat-runner/docs/guides/typescript#running-your-tests-and-scripts-directly-with--ts-node
 
 https://nodejs.org/docs/latest/api/process.html#processargv
@@ -23,7 +19,7 @@ https://docs.ethers.io/v5/api/providers/
 
 https://docs.ethers.io/v5/api/contract/contract-factory/
 
-import { ethers } from "hardhat";
+<pre><code>import { ethers } from "hardhat";
 
 const PROPOSALS = ["Proposal 1", "Proposal 2", "Proposal 3"];
 
@@ -39,29 +35,29 @@ async function main() {
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
-});
+});</code></pre>
+### Running scripts
+```
+yarn hardhat run .\scripts\Deployment.ts
+```
+### Running scripts with arguments
+```
+yarn run ts-node --files .\scripts\Deployment.ts "arg1" "arg2" "arg3
+```
 
-Running scripts
-    yarn hardhat run .\scripts\Deployment.ts
-
-Running scripts with arguments
-    yarn run ts-node --files .\scripts\Deployment.ts "arg1" "arg2" "arg3
-
-Events with solidity
-    Event syntax
-    Event storage
-    Event indexing
-    Topics and filters
-    Transaction structure
-    State changes with events
-
-References
+## Events with solidity
+* Event syntax
+* Event storage
+* Event indexing
+* Topics and filters
+* Transaction structure
+* State changes with events
+### References
 https://docs.soliditylang.org/en/latest/contracts.html#events
 
 https://dev.to/hideckies/ethers-js-cheat-sheet-1h5j
-
-Code reference
-    event NewVoter(address indexed voter);
+### Code reference
+<pre><code>    event NewVoter(address indexed voter);
 
     event Delegated(
         address indexed voter,
@@ -77,29 +73,31 @@ Code reference
         uint256 indexed proposal,
         uint256 weight
     );
-Watching for events in tests
-Event syntax with Hardhat Chai Matchers
-Triggering an event
-Checking arguments
-References
+</code></pre>
+## Watching for events in tests
+* Event syntax with Hardhat Chai Matchers
+* Triggering an event
+* Checking arguments
+### References
 https://hardhat.org/hardhat-chai-matchers/docs/overview#events
+### Code reference
 
-Code reference
-    it("triggers the NewVoter event with the address of the new voter", async function () {
+<pre><code>    it("triggers the NewVoter event with the address of the new voter", async function () {
       const voterAddress = accounts[1].address;
       await expect(ballotContract.giveRightToVote(voterAddress))
         .to.emit(ballotContract, "NewVoter")
         .withArgs(voterAddress);
     });
+</code></pre>
 
-Watching for events using a provider
-    Event syntax for Ethers.js library
-    Filters, EventFilters and topics
-    Event arguments
-    Event listeners and memory usage
-    Async logic
+## Watching for events using a provider
+* Event syntax for Ethers.js library
+* Filters, EventFilters and topics
+* Event arguments
+* Event listeners and memory usage
+* Async logic
 
-References
+### References
 https://docs.ethers.io/v5/concepts/events/
 
 https://docs.ethers.io/v5/api/contract/contract/#Contract--events
@@ -108,8 +106,9 @@ https://docs.ethers.io/v5/api/providers/types/#providers-Filter
 
 https://docs.ethers.io/v5/api/providers/types/#providers-EventFilter
 
-Code reference
-  const eventFilter = ballotContract.filters.NewVoter();
+### Code reference
+
+<pre><code>  const eventFilter = ballotContract.filters.NewVoter();
   provider.on(eventFilter, (log) => {
     console.log("New voter");
     console.log({ log });
@@ -124,13 +123,14 @@ Code reference
     console.log("New vote delegation");
     console.log({ log });
   });
+</code></pre>
 
-Homework
-    Create Github Issues with your questions about this lesson
-    Read the references
+# Homework
+* Create Github Issues with your questions about this lesson
+* Read the references
 
-Weekend Project
-    Form groups of 3 to 5 students
-    Develop and run scripts for “Ballot.sol” within your group to give voting rights, casting votes, delegating votes and querying results
-    Write a report with each function execution and the transaction hash, if successful, or the revert reason, if failed
-    Submit your code in a github repository in the form
+# Weekend Project
+* Form groups of 3 to 5 students
+* Develop and run scripts for “Ballot.sol” within your group to give voting rights, casting votes, delegating votes and querying results
+* Write a report with each function execution and the transaction hash, if successful, or the revert reason, if failed
+* Submit your code in a github repository in the form

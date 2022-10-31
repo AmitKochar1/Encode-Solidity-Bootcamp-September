@@ -1,16 +1,14 @@
-Lesson 7 - Coding Ballot.sol
-
-(Review) Coding in VS Code
-    Syntax for typescript scripts
-    How the project operates
-    Writing a test file
-    Using Ethers.js library
-    Using Hardhat toolbox
-    Using Typechain library
-    Testing syntax
-    Running a test file
-
-References
+# Lesson 7 - Coding Ballot.sol
+## (Review) Coding in VS Code
+* Syntax for typescript scripts
+* How the project operates
+* Writing a test file
+* Using Ethers.js library
+* Using Hardhat toolbox
+* Using Typechain library
+* Testing syntax
+* Running a test file
+### References
 https://docs.ethers.io/v5/
 
 https://hardhat.org/hardhat-runner/docs/getting-started#overview
@@ -23,24 +21,23 @@ https://www.chaijs.com/guide/
 
 https://github.com/dethcrypto/TypeChain
 
-Introduction for Ballot.sol
-    Scenario strategy
-    The Ballot contract
-    Giving voting rights
-    Voting
-    Delegating
-    Proposals
-
-Reference
+## Introduction for Ballot.sol
+* Scenario strategy
+* The Ballot contract
+* Giving voting rights
+* Voting
+* Delegating
+* Proposals
+### Reference
 https://docs.soliditylang.org/en/latest/solidity-by-example.html#voting
 
-Writing unit tests for Ballot.sol
-More on Ether.js functions and utilities
-Bytes32 and Strings conversion
-Helper functions inside test scripts
-Unit tests structure and nested tests
-Code reference for tests
-import { expect } from "chai";
+## Writing unit tests for Ballot.sol
+* More on Ether.js functions and utilities
+* Bytes32 and Strings conversion
+* Helper functions inside test scripts
+* Unit tests structure and nested tests
+### Code reference for tests
+<pre><code>import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Ballot } from "../typechain-types";
 
@@ -174,7 +171,8 @@ describe("Ballot", function () {
     });
   });
 });
+</code></pre>
 
-Homework
-    Create Github Issues with your questions about this lesson
-    Read the references
+# Homework
+* Create Github Issues with your questions about this lesson
+* Read the references
